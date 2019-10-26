@@ -1,0 +1,81 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+void AddEdge(vector <int> graph[], int u, int v)
+{
+    graph[u].push_back(v);
+    graph[v].push_back(u);
+    sort(graph[u].begin(), graph[u].end());
+    sort(graph[v].begin(), graph[v].end());
+}
+bool presentInQueue(vector <int> &q, int elem)
+{
+    vector <int> lookup;
+    lookup.push_back(elem);
+    vector <int>::iterator it;
+    it = search(q.begin(), q.end(), lookup.begin(), lookup.end());
+    if(it != q.end())
+    {
+        return true;
+    }
+    return false;
+}
+bool isVisited(vector <bool> &visited, int index)
+{
+    if(visited[index] == true)
+    {
+        return true;
+    }
+    return false;
+}
+void BFS(vector <int> graph[], vector <bool> &visited)
+{
+    vector <int> q;
+    vector <int> exp;
+    q.push_back(0);
+    while(!q.empty())
+    {
+        vector <int>::iterator it;
+        for(it = graph[*q.begin()].begin(); it != graph[*q.begin()].end(); it++)
+        {
+            if(isVisited(visited, *it))
+            {
+                continue;
+            }
+            else if(presentInQueue(q, *it))
+            {
+                continue;
+            }
+            else
+            {
+                q.push_back(*it);
+            }
+        }
+        cout<< *q.begin()<<"\n";
+        visited[*q.begin()] = true;
+        q.erase(q.begin());
+    }
+}
+
+int main()
+{
+  int N=5;
+  vector<bool> visited(N,false);
+  vector<int> graph[N]; 
+  
+  AddEdge(graph, 0, 1); 
+	AddEdge(graph, 0, 4); 
+	AddEdge(graph, 1, 2); 
+	AddEdge(graph, 1, 3); 
+	AddEdge(graph, 1, 4); 
+	AddEdge(graph, 2, 3); 
+	AddEdge(graph, 3, 4);
+  
+	BFS(graph, visited); 
+  
+	return 0;
+}
+
+
